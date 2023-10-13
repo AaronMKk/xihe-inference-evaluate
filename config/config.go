@@ -1,16 +1,28 @@
 package config
 
 import (
-	"github.com/opensourceways/community-robot-lib/utils"
+	"os"
 
+	"sigs.k8s.io/yaml"
+
+	"github.com/opensourceways/community-robot-lib/utils"
 	"github.com/opensourceways/xihe-inference-evaluate/infrastructure/cloudimpl"
 	"github.com/opensourceways/xihe-inference-evaluate/infrastructure/evaluateimpl"
 	"github.com/opensourceways/xihe-inference-evaluate/infrastructure/inferenceimpl"
 	"github.com/opensourceways/xihe-inference-evaluate/k8sclient"
 )
 
+func LoadFromYaml(path string, cfg interface{}) error {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	return yaml.Unmarshal(b, cfg)
+}
+
 func LoadConfig(path string, cfg interface{}) error {
-	if err := utils.LoadFromYaml(path, cfg); err != nil {
+	if err := LoadFromYaml(path, cfg); err != nil {
 		return err
 	}
 
